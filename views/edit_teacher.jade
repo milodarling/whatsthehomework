@@ -1,0 +1,172 @@
+doctype html
+html(lang="en")
+  //-capitalize the teacher's name
+  -var name = teacher.charAt(0).toUpperCase() + teacher.slice(1);
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+
+    meta(name="description", content="")
+    meta(name="author", content="")
+    link(rel="apple-touch-icon", sizes="57x57", href="/apple-icon-57x57.png")
+    link(rel="apple-touch-icon", sizes="60x60", href="/apple-icon-60x60.png")
+    link(rel="apple-touch-icon", sizes="72x72", href="/apple-icon-72x72.png")
+    link(rel="apple-touch-icon", sizes="76x76", href="/apple-icon-76x76.png")
+    link(rel="apple-touch-icon", sizes="114x114", href="/apple-icon-114x114.png")
+    link(rel="apple-touch-icon", sizes="120x120", href="/apple-icon-120x120.png")
+    link(rel="apple-touch-icon", sizes="144x144", href="/apple-icon-144x144.png")
+    link(rel="apple-touch-icon", sizes="152x152", href="/apple-icon-152x152.png")
+    link(rel="apple-touch-icon", sizes="180x180", href="/apple-icon-180x180.png")
+    link(rel="icon", type="image/png", sizes="192x192",  href="/android-icon-192x192.png")
+    link(rel="icon", type="image/png", sizes="32x32", href="/favicon-32x32.png")
+    link(rel="icon", type="image/png", sizes="96x96", href="/favicon-96x96.png")
+    link(rel="icon", type="image/png", sizes="16x16", href="/favicon-16x16.png")
+    link(rel="manifest", href="/manifest.json")
+    meta(name="msapplication-TileColor", content="#ffffff")
+    meta(name="msapplication-TileImage", content="/ms-icon-144x144.png")
+    meta(name="theme-color", content="#ffffff")
+
+    title Edit the #{name} homework
+
+    link(href="/css/bootstrap.min.css", rel="stylesheet")
+
+    link(href="/signin.css", rel="stylesheet")
+
+    script(src="/js/ie-emulation-modes-warning.js")
+
+    script(type='text/javascript').
+        
+        //add another assignment
+        function addField() {
+            // Container <div> where dynamic content will be placed
+            var container = document.getElementById("homeworks");
+            var count = container.children.length;
+            // Create an <input> element, set its type and name attributes
+            var input = document.createElement("input");
+            input.type = "text";
+            input.id = "homework[" + count + "]";
+            input.name = "homework[" + count + "]";
+            input.className = "form-control";
+            input.placeholder = "Assignment " + (count+1);
+            container.appendChild(input);
+        }
+
+
+  body
+
+    //-main container
+    .container
+
+      //-the form file
+      form#form.form-signin(action="/submit", method="post", autocomplete="off")
+
+        h2.form-signin-heading Edit the #{name} homework
+
+        //-i know this is bad™, but i have this here for now because I am a bad programmer™ and I need the teacher name to be passed to the node.js script, so I have this hidden selector
+        div(style="display: none;")
+          label(for="teacher") Teacher
+          select.form-control#teacher(name="teacher")
+            option(value="#{teacher}") #{name}
+
+        br
+
+        //-Select date to edit
+        label(for="date", class="sr-only") Date
+        select.form-control#dateToEdit(name="dateToEdit")
+          //-first option (default) is to create a new homework entry
+          option(value="new") Add new assignment
+          //-next option is to edit an old entry
+          -for (var i=0; i<homeworks.length; i++)
+            option(value="#{i}") #{homeworks[i]['date']}
+
+        br
+
+        //-date picker (used for new entries only)
+        #datepicker
+          label(for="date", class="sr-only") Date
+          input(type="date", id="date", name="date", class="form-control", placeholder="Date", autofocus, required)
+          br
+
+        //-assignment text fields
+        #homeworks
+          input(type="text", id="homework[0]", name="homework[0]" class="form-control", placeholder="Assignment 1", required)
+        a(onclick="addField()") Add another assignment
+
+        br
+        br
+
+        //-password field
+        label(for="inputPassword", class="sr-only") Password
+        input(type="password", id="inputPassword", name="inputPassword" class="form-control", placeholder="Password" required)
+
+        br
+        
+        button.btn.btn-lg.btn-primary.btn-block(type="submit") Submit
+
+
+    script(src="/js/ie10-viewport-bug-workaround.js")
+
+    script(type="text/javascript", src="/js/sha256.js")
+
+    script(type="text/javascript").
+        //get the homeworks div to edit assignemnt entries
+        var homeworksDiv = document.getElementById("homeworks");
+        //get the datepicker to show/hide it
+        var datepicker = document.getElementById("datepicker");
+
+        document.getElementById("dateToEdit").onchange = function(){
+        	//remove all existing assignment entry text fields
+            while (homeworksDiv.firstChild) {
+                homeworksDiv.removeChild(homeworksDiv.firstChild);
+            }
+            //if they have selected "add new assignment"
+            if (this.selectedIndex === 0) {
+            	//show the date picker
+                datepicker.style.display = "block";
+                datepicker.children[1].required = true;
+                //add one empty assignment field
+                var input = document.createElement("input");
+                input.type = "text"
+                input.id = "homework[0]";
+                input.name = "homework[0]";
+                input.className = "form-control";
+                input.placeholder = "Assignment 1";
+
+                homeworksDiv.appendChild(input);
+                return;
+            }
+
+            //otherwise, they are editing an existing homework -- hide the date picker and clear its value
+            datepicker.children[1].value = null;
+            datepicker.children[1].required = false;
+            datepicker.style.display = "none";
+            //get the list of homeworks passed from the JSON file
+            var homeworks = !{JSON.stringify(homeworks)};
+            //get the homework assignments for the selected date and create a text field for each assignment
+            for (var i=0; i<homeworks[this.selectedIndex-1]['homework'].length; i++) {
+                var input = document.createElement("input");
+                input.type = "text"
+                input.id = "homework[" + i + "]";
+                input.name = "homework[" + i + "]";
+                input.className = "form-control";
+                input.placeholder = "Assignment " + (i+1);
+                input.value = homeworks[this.selectedIndex-1]['homework'][i];
+
+                homeworksDiv.appendChild(input);
+            }   
+            
+        }
+
+        //get take the SHA-256 hash of the password and send that to the node.js script
+        var form = document.getElementById("form");
+        form.addEventListener("submit", function (event) {
+            //stop submission
+            event.preventDefault();
+            //get hash
+            var ali = new jsSHA("SHA-256", "TEXT");
+            ali.update(document.getElementById('inputPassword').value);
+            document.getElementById('inputPassword').value = ali.getHash("HEX");
+            //submit form
+            form.submit();
+        });
