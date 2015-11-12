@@ -1,7 +1,7 @@
 How to add teachers/classes
 =============
 
-Teachers and classes are stored here in JSON files.
+Teachers and classes are stored here in JSON files. Each JSON file should be named either the name of the class or the name of the teacher. The name of the JSON file is what is displayed on the root of the website (i.e. the presence of a `smith.json` file will cause a "Smith" button to appear on the root of the website, and the name determines the URL for that class (i.e. http://example.com/smith will load the data from `smith.json`)
 
 ###How to set up a class's JSON file
 

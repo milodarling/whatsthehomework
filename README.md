@@ -5,7 +5,7 @@ whatsthehomework is a web app created using Node.js and Jade with the goal of br
 
 The beauty of whatsthehomework is that it is completely modular. With little to no modifications, you can get whatsthehomework up and running on your own server. Every class is just a JSON file, so you just by adding JSON files, the class is automatically listed on the home page and edit page, and the homework stored in the JSON file can be viewed by students on a nicely lain out website.
 
-###How to use whatsthehomework
+###Setting up whatsthehomework
 
 whatsthehomework is a Node.js app, so you'll need Node.js running on your server. Start off by setting up Node.js (and probable nginx too). [Here](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-14-04) is a great guide to setting up Node.js and nginx for use with web apps.
 
@@ -16,6 +16,10 @@ After you have Node.js running and an nginx reverse proxy pointing towards this 
 * Change the home page (`views/home.jade`). The home page is pretty generic, so you could keep it the same, however, it currently asks other students to contact you (the moderator) if they have a teacher whose homework they'd like to put on this site, so you can either take that part down or put your real email up there.
 * Change the footer. Each homework page has a footer that says "Made with ♥ by Milo Darling." If you want to change or delete that, do so in `views/teacher.jade`.
 * Add classes. Classes can be added in the `homeworks` folder. It is fairly easy to change, and there is a readme in the [`/homeworks` folder](/homeworks) with detailed instructions on adding classes.
+
+###Using whatsthehomework
+
+Once you have set up whatsthehomework, it is fairly easy to use. Going to the root of the website gives you a nice introductory paragraph with the listing for the classes you have added. Clicking any of the links for the classes will bring you to that class's page and list all of the homework out. To edit homeworks, go to `/edit` on your website (e.g. http://example.com/edit), where you will be presented with a list of classes to edit. From there, you can select a class and either add new homework or edit existing ones.
 
 ###License
 
