@@ -7,8 +7,8 @@ Teachers and classes are stored here in JSON files.
 
 Each JSON file has the following entries:
 
-* `title`: String, mandatory. A simple title for that class's homework page (e.g. "What's the Mr. Smith homework?")
-* `customhtml`: String, optional. A place to put your own HTML tags that will be placed below the subtitle for that class's homework page (e.g. "<p>Mr. Smith Rocks!</p><br/><img src='mrsmith.jpg'>")
+* `title`: String, mandatory. A simple title for that class's homework page (e.g. `"What's the Mr. Smith homework?"`)
+* `customhtml`: String, optional. A place to put your own HTML tags that will be placed below the subtitle for that class's homework page (e.g. `"<p>Mr. Smith Rocks!</p><br/><img src='mrsmith.jpg'>"`)
 * `homeworks`: Array, mandatory. An array of homeworks with their due dates and assignments for that date. See below for more information
 
 ###The `homeworks` field
